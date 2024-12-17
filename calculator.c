@@ -1,11 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #define MAX_INPUT_SIZE 100
 
+int isDigit(char ch) {
+    return (ch >= '0' && ch <= '9');
+}
+
+int checkOperator(char operator) {
+    return (operator == '+' || operator == '-' || operator == '*' || operator == '/');
+}
+
+int division(int left, int right) {
+    if (right == 0) {
+        printf("Error: Division by zero.\n");
+        return -1;
+    }
+    return left / right;
+}
+
 void parseExpression(const char *input, int numbers[], char operators[], int *numCount, int *opCount) {
-    int i = 0, len = strlen(input), num = 0, isBuildingNumber = 0;
+    int i = 0, len = strlen(input), num = 0, isNumber = 0;
 
     *numCount = 0;
     *opCount = 0;
@@ -13,37 +27,40 @@ void parseExpression(const char *input, int numbers[], char operators[], int *nu
     while (i < len) {
         char ch = input[i];
 
-        if (isspace(ch)) {
+        if (ch == ' ') {
             i++;
             continue;
         }
 
-        if (isdigit(ch)) {
+        if (isDigit(ch)) {
             num = num * 10 + (ch - '0');
-            isBuildingNumber = 1;
-        } else if (strchr("+-*/", ch)) {
-            if (isBuildingNumber) {
+            isNumber = 1;
+        } else if (checkOperator(ch)) {
+            if (isNumber) {
                 numbers[(*numCount)++] = num;
                 num = 0;
-                isBuildingNumber = 0;
+                isNumber = 0;
             }
-
             operators[(*opCount)++] = ch;
         } else {
             printf("Error: Unexpected character '%c' in the expression.\n", ch);
-            exit(EXIT_FAILURE);
+            return;
         }
         i++;
     }
 
-    if (isBuildingNumber) {
+    if (isNumber) { 
         numbers[(*numCount)++] = num;
     }
 }
 
 int operatorPrecedence(char operator) {
-    if (operator == '+' || operator == '-') return 1;
-    if (operator == '*' || operator == '/') return 2;
+    if (operator == '+' || operator == '-'){
+        return 1;
+    }
+    if (operator == '*' || operator == '/'){
+        return 2;
+    }
     return 0;
 }
 
@@ -53,19 +70,16 @@ int applyOperator(int left, int right, char operator) {
         case '-': return left - right;
         case '*': return left * right;
         case '/': 
-            if (right == 0) {
-                printf("Error: Division by zero.\n");
-                exit(EXIT_FAILURE);
-            }
-            return left / right;
+            return division(left, right);
         default:
             printf("Error: Unsupported operator '%c'.\n", operator);
-            exit(EXIT_FAILURE);
+            return -1;
     }
 }
 
 int evaluateParsedExpression(int numbers[], char operators[], int numCount, int opCount) {
     for (int prec = 2; prec >= 1; prec--) {
+
         int i = 0;
         while (i < opCount) {
             if (operatorPrecedence(operators[i]) == prec) {
@@ -99,15 +113,18 @@ int evaluateExpression(const char *input) {
     return evaluateParsedExpression(numbers, operators, numCount, opCount);
 }
 
-int main() {
+void takeInput() {
     char input[MAX_INPUT_SIZE];
 
     printf("Enter a mathematical expression: ");
-    fgets(input, MAX_INPUT_SIZE, stdin);
-    input[strcspn(input, "\n")] = 0;
+    scanf("%s", input);
 
     int result = evaluateExpression(input);
     printf("Result: %d\n", result);
+}
+
+int main() {
+    takeInput();
 
     return 0;
 }
