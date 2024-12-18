@@ -89,13 +89,11 @@ void addUser() {
         printf("\nAssigned User ID: %d\n", user.id);
 
         printf("Enter user name: ");
-        fgets(user.name, MAX_SIZE, stdin);
-        strtok(user.name, "\n");
+        scanf("%s", user.name);
 
         while (!validateName(user.name)) {
             printf("Error: Name must contain only alphabetic characters and spaces.\nEnter user name: ");
-            fgets(user.name, MAX_SIZE, stdin);
-            strtok(user.name, "\n");
+            scanf("%s", user.name);
         }
 
         printf("Enter user age: ");
@@ -195,13 +193,11 @@ void updateUser(int id) {
             if (user.id == id) {
                 found = 1;
                 printf("Enter new name for user: ");
-                fgets(user.name, MAX_SIZE, stdin);
-                strtok(user.name, "\n");
+                scanf("%s", user.name);
 
                 while (!validateName(user.name)) {
                     printf("Error: Name must contain only alphabetic characters and spaces.\nEnter new name: ");
-                    fgets(user.name, MAX_SIZE, stdin);
-                    strtok(user.name, "\n");
+                    scanf("%s", user.name);
                 }
 
                 printf("Enter new age for user: ");
