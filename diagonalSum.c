@@ -8,16 +8,14 @@ void takeInput(char *input, int ***arr, int *rows, int *cols) {
     int temp[100][100] = {0};  // Temporary array to store parsed values
     int row = 0, col = 0;
 
-    printf("Enter a 2D array in the format [[1,2,3],[-4,5,6]]:\n");
-    // scanf("%[^\n]s", input);
-    input = "[[1,10,4],[9,3,8],[15,16,17]]";
+    printf("Enter a 2D array in the format [[1 2 3],[-4 5 6]]:\n");
+    scanf("%[^\n]s", input);
+    // input = "[[1,10,4],[9,3,8],[15,16,17]]";
 
     for (char *itr = input; *itr != '\0'; itr++) {
         if (*itr == '[') {
-            // Start of a new row
             continue;
         } else if (*itr == '-') {
-            // Handle negative numbers
             itr++;
             int number = 0;
             while (*itr >= '0' && *itr <= '9') {
@@ -28,7 +26,6 @@ void takeInput(char *input, int ***arr, int *rows, int *cols) {
             temp[row][col++] = -number;
             if (col > *cols) *cols = col;
         } else if (*itr >= '0' && *itr <= '9') {
-            // Parse positive numbers
             int number = 0;
             while (*itr >= '0' && *itr <= '9') {
                 number = number * 10 + (*itr - '0');
@@ -48,7 +45,6 @@ void takeInput(char *input, int ***arr, int *rows, int *cols) {
 
     *rows = row;
 
-    // Allocate memory for the 2D array
     *arr = (int **)malloc(*rows * sizeof(int *));
     for (int i = 0; i < *rows; i++) {
         (*arr)[i] = (int *)malloc(*cols * sizeof(int));
