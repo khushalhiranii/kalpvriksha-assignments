@@ -145,10 +145,8 @@ void printList(LinkedList* llist) {
     printf("NULL\n");
 }
 
-int main(){
-    LinkedList * llist = (LinkedList *)malloc(sizeof(LinkedList));
-    llist->head = NULL;
-    llist->tail = NULL;
+void inputAndOperations(LinkedList * llist){
+    
     int numberOfOperations;
     scanf("%d", &numberOfOperations);
     for(int i=0; i<numberOfOperations; i++){
@@ -203,12 +201,18 @@ int main(){
             }
             default:{
                 printf("Invalid input\n");
-                return 0;
+                i++;
+                break;
             }
         }
 
     }
-    printList(llist);
+}
 
+int main(){
+    LinkedList * llist = (LinkedList *)malloc(sizeof(LinkedList));
+    llist->head = NULL;
+    llist->tail = NULL;
+    inputAndOperations(llist);
     return 0;
 }
