@@ -71,18 +71,41 @@ int size (Queue * queue){
     return count;
 }
 
-int main(){
+void menuSystem() {
     Queue * queue = (Queue *)malloc(sizeof(Queue));
     queue->front = NULL;
     queue->rear = NULL;
-    enqueue(queue, 10);
-    enqueue(queue, 21);
-    printf("Size of queue: %d\n", size(queue));
-    dequeue(queue);
-    enqueue(queue, 42);
-    dequeue(queue);
-    dequeue(queue);
-    peek(queue);
-    printf("Size of queue: %d\n", size(queue));
+    int choice, value;
+
+    while (1) {
+        printf("Enter 1 for enqueue, 2 for dequeue, 3 for peek, 4 for size and 0 for exit\n");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to enqueue: ");
+                scanf("%d", &value);
+                enqueue(queue, value);
+                break;
+            case 2:
+                dequeue(queue);
+                break;
+            case 3:
+                peek(queue);
+                break;
+            case 4:
+                printf("Size: %d\n", size(queue));
+                break;
+            case 0:
+                free(queue);
+                return;
+            default:
+                break;
+        }
+    }
+}
+
+int main(){
+    menuSystem();
     return 0;
 }

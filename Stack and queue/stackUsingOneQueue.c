@@ -1,113 +1,123 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct Node{
+typedef struct Node {
     int data;
-    struct Node * next;
-}Node;
+    struct Node *next;
+} Node;
 
-typedef struct Queue{
-    Node * front;
-    Node * rear;
-}Queue;
+typedef struct Queue {
+    Node *front;
+    Node *rear;
+} Queue;
 
-Node * createNode(int value){
-    Node * new = (Node *)malloc(sizeof(Node));
+Queue* createQueue() {
+    Queue *queue = (Queue *)malloc(sizeof(Queue));
+    queue->front = queue->rear = NULL;
+    return queue;
+}
+
+Node* createNode(int value) {
+    Node* new = (Node*)malloc(sizeof(Node));
     new->data = value;
     new->next = NULL;
     return new;
 }
 
-bool isEmpty(Queue *queue){
-    if(queue->front == NULL){
-        return true;
-    }
-    return false;
+bool isEmpty(Queue* queue) {
+    return queue->front == NULL;
 }
 
-void enqueue(Queue *queue, int data){
-    Node * newNode = createNode(data);
-    if(queue->front == NULL){
+void enqueue(Queue* queue, int data) {
+    Node* newNode = createNode(data);
+    if (queue->front == NULL) {
         queue->front = queue->rear = newNode;
-    }else{
+    } else {
         queue->rear->next = newNode;
-        queue->rear=newNode;
+        queue->rear = newNode;
     }
 }
 
-int dequeue(Queue *queue){
-    if(isEmpty(queue)){
-        printf("Queue is empty\n");
+int dequeue(Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty.\n");
         return -1;
     }
-    
-    Node * temp = queue->front;
+    Node* temp = queue->front;
     int frontData = temp->data;
-    // printf("Dequeued: %d\n", queue->front->data);
     queue->front = queue->front->next;
-
-    if(queue->front == NULL) queue->rear = NULL;
+    if (queue->front == NULL) queue->rear = NULL;
     free(temp);
     return frontData;
 }
 
-void peek(Queue *queue){
-    if(isEmpty(queue)){
-        printf("Queue is empty.\n");
-        return;
-    }
-    printf("Peek element is: %d\n", queue->front->data);
-}
-
-int size (Queue * queue){
-    int count=0;
-    if(isEmpty(queue)){
-        return count;
-    }
-    Node * ptr = queue->front;
-    while(ptr != NULL){
+int size(Queue* queue) {
+    int count = 0;
+    Node* ptr = queue->front;
+    while (ptr != NULL) {
         count++;
-        ptr=ptr->next;
+        ptr = ptr->next;
     }
     return count;
 }
 
-void push(Queue *queue, int data){
+void push(Queue* queue, int data) {
     enqueue(queue, data);
-    return;
-}
-
-void pop(Queue *queue){
-    for(int i=0; i<size(queue)-1; i++){
-        int temp = dequeue(queue);
-        enqueue(queue, temp);
+    int queueSize = size(queue);
+    
+    for (int i = 0; i < queueSize - 1; i++) {
+        enqueue(queue, dequeue(queue));
     }
-    int poppedData = dequeue(queue);
-    printf("%d ", poppedData);
-    return;
 }
 
-int top(Queue *queue){
-    printf("%d", queue->rear->data);
+void pop(Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Stack is empty.\n");
+        return;
+    }
+    printf("Popped: %d\n", dequeue(queue));
 }
 
-int main(){
-    Queue * queue = (Queue *)malloc(sizeof(Queue));
-    queue->front = NULL;
-    queue->rear = NULL;
-    push(queue, 10);
-    push(queue, 21);
-    printf("Size of queue: %d\n", size(queue));
-    pop(queue);
-    push(queue, 42);
-    pop(queue);
-    pop(queue);
-    push(queue, 21);
-    push(queue, 12);
-    push(queue, 33);
-    pop(queue);
-    top(queue);
-    printf("Size of queue: %d\n", size(queue));
+int top(Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Stack is empty.\n");
+        return -1;
+    }
+    return queue->front->data;
+}
+
+void menuSystem() {
+    Queue* stack = createQueue();
+
+    printf("Enter 1 for push, 2 for pop, 3 for top, 4 for size, and 0 for exit\n");
+    int operation = 1;
+    while (operation > 0 && operation <= 4) {
+        printf("Enter the operation: ");
+        scanf("%d", &operation);
+        switch (operation) {
+            case 1:
+                int element;
+                printf("Enter the element to push: ");
+                scanf("%d", &element);
+                push(stack, element);
+                break;
+            case 2:
+                pop(stack);
+                break;
+            case 3:
+                printf("Top: %d\n", top(stack));
+                break;
+            case 4:
+                printf("Size: %d\n", size(stack));
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+int main() {
+    menuSystem();
     return 0;
 }

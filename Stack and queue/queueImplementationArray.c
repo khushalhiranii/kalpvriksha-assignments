@@ -37,11 +37,6 @@ void enqueue(Queue *queue, int data){
         }
         queue->rear++;
         queue->array[queue->rear] = data;
-        printf("element added is : %d and rear is %d \n", queue->array[queue->rear], queue->rear);
-
-        
-    
-    
 }
 
 void dequeue(Queue *queue){
@@ -49,7 +44,6 @@ void dequeue(Queue *queue){
         printf("Queue is empty\n");
         return;
     }
-    printf("Dequeued: %d", queue->array[queue->front]);
     if(queue->front == queue->rear){
         queue->front = queue->rear = -1;
         return;
@@ -63,7 +57,7 @@ void peek(Queue *queue){
         printf("Queue is empty\n");
         return;
     }
-    printf("Peek: %d", queue->array[queue->front]);
+    printf("Peek: %d\n", queue->array[queue->front]);
     return;
 
 }
@@ -75,16 +69,44 @@ int size(Queue *queue){
     return (queue->rear - queue->front + 1);
 }
 
+void menuSystem() {
+    unsigned capacity;
+    printf("Enter queue capacity: ");
+    scanf("%u", &capacity);
+
+    Queue *queue = initializeQueue(capacity);
+    int choice, value;
+
+    while (1) {
+        printf("Enter 1 for enqueue, 2 for dequeue, 3 for peek, 4 for size and 0 for exit\n");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to enqueue: ");
+                scanf("%d", &value);
+                enqueue(queue, value);
+                break;
+            case 2:
+                dequeue(queue);
+                break;
+            case 3:
+                peek(queue);
+                break;
+            case 4:
+                printf("Size: %d\n", size(queue));
+                break;
+            case 0:
+                free(queue->array);
+                free(queue);
+                return;
+            default:
+                break;
+        }
+    }
+}
+
 int main(){
-    Queue *queue = initializeQueue(5);
-    enqueue(queue, 10);
-    enqueue(queue, 21);
-    printf("Size of queue: %d\n", size(queue));
-    dequeue(queue);
-    enqueue(queue, 42);
-    dequeue(queue);
-    dequeue(queue);
-    peek(queue);
-    printf("Size of queue: %d\n", size(queue));
+    menuSystem();
     return 0;
 }

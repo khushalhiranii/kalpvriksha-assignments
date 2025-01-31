@@ -67,21 +67,38 @@ int size (Stack * stack){
     return count++;
 }
 
+void menuSystem(){
+    Stack * stack = (Stack *)malloc(sizeof(Stack));
+    stack->head = NULL;
+    printf("Enter 1 for push, 2 for pop, 3 for peek, 4 for size and 0 for exit\n");
+    int operation=1;
+    while(operation > 0 && operation <= 4){
+        printf("Enter the operation: ");
+        scanf("%d", &operation);
+        switch (operation)
+        {
+        case 1:
+            int element;
+            printf("Enter the element to push: ");
+            scanf("%d", &element);
+            push(stack, element);
+            break;
+        case 2:
+            pop(stack);
+            break;
+        case 3:
+            printf("Peek: %d\n", peek(stack));
+            break;
+        case 4:
+            printf("Size: %d\n", size(stack));
+            break;
+        default:
+            break;
+        }
+    }
+}
+
 int main(){
-    Stack * stack;
-    stack -> head = NULL;
-    push(stack, 10);
-    printf("Peek element is: %d\n", peek(stack));
-    push(stack, 21);
-    printf("Peek element is: %d\n", peek(stack));
-    push(stack, 30);
-    printf("Peek element is: %d\n", peek(stack));
-    pop(stack);
-    printf("Peek element is: %d\n", peek(stack));
-    pop(stack);
-    printf("Peek element is: %d\n", peek(stack));
-    pop(stack);
-    printf("Peek element is: %d\n", peek(stack));
-    printf("Size of stack: %d\n", size(stack));
+    menuSystem();
     return 0;
 }
